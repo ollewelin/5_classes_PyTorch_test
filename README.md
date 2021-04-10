@@ -8,7 +8,7 @@ Train and Test a Deep neural network with PyTorch C++ API Libtorch on 5 classes 
 
 ## Installation guide on Ubuntu machine:
 
-#### Direcly installation:
+#### Directly installation:
 
 https://github.com/ollewelin/torchlib-opencv-gpu
 
