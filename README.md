@@ -73,19 +73,8 @@ Auto rename all jpg files inside each folder to be 0.jpg to 502.jpg etc
 
     $ cd class0
     $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
-    $ cd ..
-    $ cd class1
-    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
-    $ cd ..
-    $ cd class2
-    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
-    $ cd ..
-    $ cd class3
-    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
-    $ cd ..
-    $ cd class4
-    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
-    $ cd ..
+
+Do same for all image folders
   
 
 ### Build and Run the program
