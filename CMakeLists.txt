@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_LIBRARY_PATH "/usr/local/cuda-10.2/targets/x86_64-linux/lib")
 set(OpenCV_DIR /home/olle/OpenCV/opencv-master/build)
 
-list(APPEND CMAKE_PREFIX_PATH "/home/olle/hello3/libtorch-GPU-CNN-test-MNIST-with-Batchnorm/libtorch")
+list(APPEND CMAKE_PREFIX_PATH "/home/olle/class_test/5_classes_PyTorch_test/libtorch")
 find_package(Torch REQUIRED)  
 find_package(OpenCV REQUIRED)
 #target_link_libraries(main ${TORCH_LIBRARIES} ${OpenCV_LIBRARIES})
