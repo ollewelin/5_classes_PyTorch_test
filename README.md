@@ -60,4 +60,9 @@ https://www.kaggle.com/alxmamaev/flowers-recognition
     repo_root/data/class3/0..502.jpg files
     repo_root/data/class4/0..502.jpg files
 
+### Build and Run the program
 
+    $ cmake CMakeLists.txt
+    $ make 
+    $ ./main
+    
