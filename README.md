@@ -1,4 +1,4 @@
-# 5_classes_PyTorch_test
+# PyTorch C++ API test a small convolution neural network on Kaggle Flowers datasets.
 
 ![](5_classes_flowers_tulips.png)
 
