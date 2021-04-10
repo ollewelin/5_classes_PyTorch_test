@@ -42,7 +42,7 @@ https://www.kaggle.com/alxmamaev/flowers-recognition
 
 ### Make 5 data folders with 503 jpg files abriatary size images
 
-### Data structure
+#### Data structure
 
     repo_root 
     
@@ -59,6 +59,34 @@ https://www.kaggle.com/alxmamaev/flowers-recognition
     repo_root/data/class2/0..502.jpg files
     repo_root/data/class3/0..502.jpg files
     repo_root/data/class4/0..502.jpg files
+    
+#### Make datasets structure 
+    
+    $ mkdir data
+    $ cd data
+    
+#### Copy over 5 categorys flowers from Kaggle dataset into data
+
+Rename each flower catalogue to class0..5
+
+Auto rename all jpg files inside each folder to be 0.jpg to 502.jpg etc
+
+    $ cd class0
+    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
+    $ cd ..
+    $ cd class1
+    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
+    $ cd ..
+    $ cd class2
+    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
+    $ cd ..
+    $ cd class3
+    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
+    $ cd ..
+    $ cd class4
+    $ counter=0; for file in *; do [[ -f $file ]] && mv -i "$file" $((counter+1)).jpg && ((counter++)); done
+    $ cd ..
+  
 
 ### Build and Run the program
 
