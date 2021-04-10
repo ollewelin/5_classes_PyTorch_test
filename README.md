@@ -2,5 +2,5 @@
 
 ![](5_classes_flowers_tulips.png)
 
-![](5_classes_flowers_roses.png)
+![](5_classes_flowers_rose.png)
 
