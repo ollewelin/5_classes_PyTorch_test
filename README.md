@@ -88,4 +88,8 @@ Do same for all image folders
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-8-0-now-available/72048
 
 https://www.programmersought.com/article/57753916788/
+
+### Check JetPack Version on Jetson Nano
+
+https://github.com/jetsonhacks/jetsonUtilities
     
