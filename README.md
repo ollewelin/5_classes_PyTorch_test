@@ -83,7 +83,9 @@ Do same for all image folders
     $ make 
     $ ./main
     
-### Jetson Nano installation
+# Jetson Nano
+
+## Jetson Nano installation
 
 https://forums.developer.nvidia.com/t/pytorch-for-jetson-version-1-8-0-now-available/72048
 
