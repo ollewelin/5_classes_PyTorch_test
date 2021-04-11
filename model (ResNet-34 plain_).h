@@ -1,7 +1,7 @@
 #pragma once
 
 #include <torch/torch.h>
-
+#include <iostream>
 const double bn_momentum = 0.9;
 const double bn_lr = 0.001;
 
@@ -10,81 +10,81 @@ struct ObscureResNetImpl : public torch::nn::Module
 {
   ObscureResNetImpl(int number_of_classes) 
   :    // conv1(torch::nn::Conv2dOptions(3, 20, /*kernel_size=*/5).stride(2)),
-     //   bn0(torch::nn::BatchNorm2d(3)),
+        bn0(torch::nn::BatchNorm2d(3)),
         conv1(torch::nn::Conv2dOptions(3, 64, /*kernel_size=*/7).stride(2)),
         
         bn1(torch::nn::BatchNorm2d(64)),
-        conv2(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv2(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn2(torch::nn::BatchNorm2d(64)),
-        conv3(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv3(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn3(torch::nn::BatchNorm2d(64)),
-        conv4(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv4(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn4(torch::nn::BatchNorm2d(64)),
-        conv5(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv5(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn5(torch::nn::BatchNorm2d(64)),
-        conv6(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv6(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn6(torch::nn::BatchNorm2d(64)),
-        conv7(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3)),
+        conv7(torch::nn::Conv2dOptions(64, 64, /*kernel_size=*/3).padding(1)),
         bn7(torch::nn::BatchNorm2d(64)),
 
         conv8(torch::nn::Conv2dOptions(64, 128, /*kernel_size=*/3).stride(2)),
         bn8(torch::nn::BatchNorm2d(128)),
-        conv9(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv9(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn9(torch::nn::BatchNorm2d(128)),
-        conv10(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv10(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn10(torch::nn::BatchNorm2d(128)),
-        conv11(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv11(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn11(torch::nn::BatchNorm2d(128)),
-        conv12(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv12(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn12(torch::nn::BatchNorm2d(128)),
-        conv13(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv13(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn13(torch::nn::BatchNorm2d(128)),
-        conv14(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv14(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn14(torch::nn::BatchNorm2d(128)),
-        conv15(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3)),
+        conv15(torch::nn::Conv2dOptions(128, 128, /*kernel_size=*/3).padding(1)),
         bn15(torch::nn::BatchNorm2d(128)),
 
         conv16(torch::nn::Conv2dOptions(128, 256, /*kernel_size=*/3).stride(2)),
         bn16(torch::nn::BatchNorm2d(256)),
-        conv17(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv17(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn17(torch::nn::BatchNorm2d(256)),
-        conv18(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv18(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn18(torch::nn::BatchNorm2d(256)),
-        conv19(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv19(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn19(torch::nn::BatchNorm2d(256)),
-        conv20(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv20(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn20(torch::nn::BatchNorm2d(256)),
-        conv21(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv21(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn21(torch::nn::BatchNorm2d(256)),
-        conv22(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv22(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn22(torch::nn::BatchNorm2d(256)),
-        conv23(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv23(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn23(torch::nn::BatchNorm2d(256)),
-        conv24(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv24(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn24(torch::nn::BatchNorm2d(256)),
-        conv25(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv25(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn25(torch::nn::BatchNorm2d(256)),
-        conv26(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv26(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn26(torch::nn::BatchNorm2d(256)),
-        conv27(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3)),
+        conv27(torch::nn::Conv2dOptions(256, 256, /*kernel_size=*/3).padding(1)),
         bn27(torch::nn::BatchNorm2d(256)),
 
         conv28(torch::nn::Conv2dOptions(256, 512, /*kernel_size=*/3).stride(2)),
         bn28(torch::nn::BatchNorm2d(512)),
-        conv29(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3)),
+        conv29(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3).padding(1)),
         bn29(torch::nn::BatchNorm2d(512)),
-        conv30(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3)),
+        conv30(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3).padding(1)),
         bn30(torch::nn::BatchNorm2d(512)),
-        conv31(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3)),
+        conv31(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3).padding(1)),
         bn31(torch::nn::BatchNorm2d(512)),
-        conv32(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3)),
+        conv32(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3).padding(1)),
         bn32(torch::nn::BatchNorm2d(512)),
-        conv33(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3)),
+        conv33(torch::nn::Conv2dOptions(512, 512, /*kernel_size=*/3).padding(1)),
         bn33(torch::nn::BatchNorm2d(512)),
 
-        fc1(1000, number_of_classes) {
+        fc1(1080, number_of_classes) {
 
-   // register_module("bn0", bn0);
+    register_module("bn0", bn0);
 
     register_module("conv1", conv1);
     register_module("bn1", bn1);
@@ -165,7 +165,11 @@ struct ObscureResNetImpl : public torch::nn::Module
   }
     torch::Tensor forward(torch::Tensor x) {
 
-  //  x = torch::batch_norm(bn0->forward(x), bn0W,bnBias0W,bnmean0W,bnvar0W,true,bn_momentum,bn_lr,true);
+    std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+    std::cout << "This network don't work yet.... Olle Welin " << std::endl;
+    std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+
+    x = torch::batch_norm(bn0->forward(x), bn0W,bnBias0W,bnmean0W,bnvar0W,true,bn_momentum,bn_lr,true);
     x = torch::relu(torch::max_pool2d(conv1->forward(x), 2));
     x = torch::batch_norm(bn1->forward(x), bn1W,bnBias1W,bnmean1W,bnvar1W,true,bn_momentum,bn_lr,true);
 
@@ -312,23 +316,23 @@ struct ObscureResNetImpl : public torch::nn::Module
     x = conv33->forward(x);
     x = torch::batch_norm(bn33->forward(x), bn33W,bnBias33W,bnmean33W,bnvar33W,true,bn_momentum,bn_lr,true);
     x += res13;
-   // x = torch::relu(x);
+    x = torch::relu(x);
 
     x = torch::relu(torch::avg_pool2d(bn33->forward(x), 2));
 
     x = torch::dropout(x, /*p=*/0.25, /*training=*/is_training());
 
-    x = x.view({-1, 1000});
+    x = x.view({-1, 1080});
     x = torch::relu(fc1->forward(x));
     return torch::log_softmax(x, /*dim=*/1);
   }
-  /*
+  
   torch::Tensor bn0W;
   torch::Tensor bnBias0W;
   torch::Tensor bnmean0W;
   torch::Tensor bnvar0W;
   torch::nn::BatchNorm2d bn0;
-*/
+
   torch::Tensor bn1W;
   torch::Tensor bnBias1W;
   torch::Tensor bnmean1W;
