@@ -2,8 +2,8 @@
 
 #include <torch/torch.h>
 #include <iostream>
-const double bn_momentum = 0.9;
-const double bn_lr = 0.001;
+const double bn_momentum = 0.7;
+const double bn_lr = 0.0002;
 const int nodes_to_fc1 = 2048;
 struct ObscureResNetImpl : public torch::nn::Module 
 {
