@@ -82,7 +82,20 @@ Do same for all image folders
     $ cmake CMakeLists.txt
     $ make 
     $ ./main
+
+# Use of my plain Resnet-34 model instead
+
+## Use and renamne files for test Resnet-34
+
+    $ mv main.cpp original_main.cpp
+    $ mv "main (Resnet-34).cpp" main.cpp
+    $ mv model.h original_model.h
+    $ mv "model (Resnet-34).h" model.h
     
+## Combine zip files
+
+    $
+
 # Jetson Nano
 
 ## Jetson Nano installation
