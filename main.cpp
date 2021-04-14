@@ -222,7 +222,7 @@ auto main() -> int {
   std::cout << custom_dataset_size << std::endl;
 
   auto train_loader =
-      torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(
+      torch::data::make_data_loader<torch::data::samplers::RandomSampler>(
           std::move(custom_dataset), kTrainBatchSize);
 
 
