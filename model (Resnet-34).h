@@ -2,6 +2,9 @@
 
 #include <torch/torch.h>
 #include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
+
 const double bn_momentum = 0.7;
 const double bn_lr = 0.002;
 const int nodes_to_fc1 = 2048;
@@ -164,164 +167,158 @@ struct ObscureResNetImpl : public torch::nn::Module
   }
     torch::Tensor forward(torch::Tensor x) {
 
-    x = torch::batch_norm(bn0->forward(x), bn0W,bnBias0W,bnmean0W,bnvar0W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn0->forward(x), bn0W,bnBias0W,bnmean0W,bnvar0W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(torch::max_pool2d(conv1->forward(x), 2));
-    x = torch::batch_norm(bn1->forward(x), bn1W,bnBias1W,bnmean1W,bnvar1W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn1->forward(x), bn1W,bnBias1W,bnmean1W,bnvar1W,is_training(),bn_momentum,bn_lr,true);
 
     torch::Tensor res1(x.clone());
     x = conv2->forward(x);
-    x = torch::batch_norm(bn2->forward(x), bn2W,bnBias2W,bnmean2W,bnvar2W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn2->forward(x), bn2W,bnBias2W,bnmean2W,bnvar2W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv3->forward(x);
-    x = torch::batch_norm(bn3->forward(x), bn3W,bnBias3W,bnmean3W,bnvar3W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn3->forward(x), bn3W,bnBias3W,bnmean3W,bnvar3W,is_training(),bn_momentum,bn_lr,true);
     x += res1;
     x = torch::relu(x);
 
     torch::Tensor res2(x.clone());
     x = conv4->forward(x);
-    x = torch::batch_norm(bn4->forward(x), bn4W,bnBias4W,bnmean4W,bnvar4W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn4->forward(x), bn4W,bnBias4W,bnmean4W,bnvar4W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv5->forward(x);
-    x = torch::batch_norm(bn5->forward(x), bn5W,bnBias5W,bnmean5W,bnvar5W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn5->forward(x), bn5W,bnBias5W,bnmean5W,bnvar5W,is_training(),bn_momentum,bn_lr,true);
     x += res2;
     x = torch::relu(x);
 
     torch::Tensor res3(x.clone());
     x = conv6->forward(x);
-    x = torch::batch_norm(bn6->forward(x), bn6W,bnBias6W,bnmean6W,bnvar6W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn6->forward(x), bn6W,bnBias6W,bnmean6W,bnvar6W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv7->forward(x);
-    x = torch::batch_norm(bn7->forward(x), bn7W,bnBias7W,bnmean7W,bnvar7W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn7->forward(x), bn7W,bnBias7W,bnmean7W,bnvar7W,is_training(),bn_momentum,bn_lr,true);
     x += res3;
     x = torch::relu(x);
 
     //torch::Tensor res...(x.clone());
     x = conv8->forward(x);
-    x = torch::batch_norm(bn8->forward(x), bn8W,bnBias8W,bnmean8W,bnvar8W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn8->forward(x), bn8W,bnBias8W,bnmean8W,bnvar8W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv9->forward(x);
-    x = torch::batch_norm(bn9->forward(x), bn9W,bnBias9W,bnmean9W,bnvar9W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn9->forward(x), bn9W,bnBias9W,bnmean9W,bnvar9W,is_training(),bn_momentum,bn_lr,true);
     //x += res...;
     x = torch::relu(x);
 
     torch::Tensor res4(x.clone());
     x = conv10->forward(x);
-    x = torch::batch_norm(bn10->forward(x), bn10W,bnBias10W,bnmean10W,bnvar10W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn10->forward(x), bn10W,bnBias10W,bnmean10W,bnvar10W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv11->forward(x);
-    x = torch::batch_norm(bn11->forward(x), bn11W,bnBias11W,bnmean11W,bnvar11W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn11->forward(x), bn11W,bnBias11W,bnmean11W,bnvar11W,is_training(),bn_momentum,bn_lr,true);
     x += res4;
     x = torch::relu(x);
 
     torch::Tensor res5(x.clone());
     x = conv12->forward(x);
-    x = torch::batch_norm(bn12->forward(x), bn12W,bnBias12W,bnmean12W,bnvar12W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn12->forward(x), bn12W,bnBias12W,bnmean12W,bnvar12W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv13->forward(x);
-    x = torch::batch_norm(bn13->forward(x), bn13W,bnBias13W,bnmean13W,bnvar13W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn13->forward(x), bn13W,bnBias13W,bnmean13W,bnvar13W,is_training(),bn_momentum,bn_lr,true);
     x += res5;
     x = torch::relu(x);
 
     torch::Tensor res6(x.clone());
     x = conv14->forward(x);
-    x = torch::batch_norm(bn14->forward(x), bn14W,bnBias14W,bnmean14W,bnvar14W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn14->forward(x), bn14W,bnBias14W,bnmean14W,bnvar14W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv15->forward(x);
-    x = torch::batch_norm(bn15->forward(x), bn15W,bnBias15W,bnmean15W,bnvar15W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn15->forward(x), bn15W,bnBias15W,bnmean15W,bnvar15W,is_training(),bn_momentum,bn_lr,true);
     x += res6;
     x = torch::relu(x);
 
     //torch::Tensor res...(x.clone());
     x = conv16->forward(x);
-    x = torch::batch_norm(bn16->forward(x), bn16W,bnBias16W,bnmean16W,bnvar16W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn16->forward(x), bn16W,bnBias16W,bnmean16W,bnvar16W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv17->forward(x);
-    x = torch::batch_norm(bn17->forward(x), bn17W,bnBias17W,bnmean17W,bnvar17W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn17->forward(x), bn17W,bnBias17W,bnmean17W,bnvar17W,is_training(),bn_momentum,bn_lr,true);
     //x += res...;
     x = torch::relu(x);
 
     torch::Tensor res7(x.clone());
     x = conv18->forward(x);
-    x = torch::batch_norm(bn18->forward(x), bn18W,bnBias18W,bnmean18W,bnvar18W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn18->forward(x), bn18W,bnBias18W,bnmean18W,bnvar18W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv19->forward(x);
-    x = torch::batch_norm(bn19->forward(x), bn19W,bnBias19W,bnmean19W,bnvar19W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn19->forward(x), bn19W,bnBias19W,bnmean19W,bnvar19W,is_training(),bn_momentum,bn_lr,true);
     x += res7;
     x = torch::relu(x);
 
     torch::Tensor res8(x.clone());
     x = conv20->forward(x);
-    x = torch::batch_norm(bn20->forward(x), bn20W,bnBias20W,bnmean20W,bnvar20W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn20->forward(x), bn20W,bnBias20W,bnmean20W,bnvar20W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv21->forward(x);
-    x = torch::batch_norm(bn21->forward(x), bn21W,bnBias21W,bnmean21W,bnvar21W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn21->forward(x), bn21W,bnBias21W,bnmean21W,bnvar21W,is_training(),bn_momentum,bn_lr,true);
     x += res8;
     x = torch::relu(x);
 
     torch::Tensor res9(x.clone());
     x = conv22->forward(x);
-    x = torch::batch_norm(bn22->forward(x), bn22W,bnBias22W,bnmean22W,bnvar22W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn22->forward(x), bn22W,bnBias22W,bnmean22W,bnvar22W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv23->forward(x);
-    x = torch::batch_norm(bn23->forward(x), bn23W,bnBias23W,bnmean23W,bnvar23W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn23->forward(x), bn23W,bnBias23W,bnmean23W,bnvar23W,is_training(),bn_momentum,bn_lr,true);
     x += res9;
     x = torch::relu(x);
 
     torch::Tensor res10(x.clone());
     x = conv24->forward(x);
-    x = torch::batch_norm(bn24->forward(x), bn24W,bnBias24W,bnmean24W,bnvar24W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn24->forward(x), bn24W,bnBias24W,bnmean24W,bnvar24W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv25->forward(x);
-    x = torch::batch_norm(bn25->forward(x), bn25W,bnBias25W,bnmean25W,bnvar25W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn25->forward(x), bn25W,bnBias25W,bnmean25W,bnvar25W,is_training(),bn_momentum,bn_lr,true);
     x += res10;
     x = torch::relu(x);
 
     torch::Tensor res11(x.clone());
     x = conv26->forward(x);
-    x = torch::batch_norm(bn26->forward(x), bn26W,bnBias26W,bnmean26W,bnvar26W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn26->forward(x), bn26W,bnBias26W,bnmean26W,bnvar26W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv27->forward(x);
-    x = torch::batch_norm(bn27->forward(x), bn27W,bnBias27W,bnmean27W,bnvar27W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn27->forward(x), bn27W,bnBias27W,bnmean27W,bnvar27W,is_training(),bn_momentum,bn_lr,true);
     x += res11;
     x = torch::relu(x);
 
     //torch::Tensor res...(x.clone());
     x = conv28->forward(x);
-    x = torch::batch_norm(bn28->forward(x), bn28W,bnBias28W,bnmean28W,bnvar28W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn28->forward(x), bn28W,bnBias28W,bnmean28W,bnvar28W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv29->forward(x);
-    x = torch::batch_norm(bn29->forward(x), bn29W,bnBias29W,bnmean29W,bnvar29W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn29->forward(x), bn29W,bnBias29W,bnmean29W,bnvar29W,is_training(),bn_momentum,bn_lr,true);
     //x += res...;
     x = torch::relu(x);
 
     torch::Tensor res12(x.clone());
     x = conv30->forward(x);
-    x = torch::batch_norm(bn30->forward(x), bn30W,bnBias30W,bnmean30W,bnvar30W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn30->forward(x), bn30W,bnBias30W,bnmean30W,bnvar30W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv31->forward(x);
-    x = torch::batch_norm(bn31->forward(x), bn31W,bnBias31W,bnmean31W,bnvar31W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn31->forward(x), bn31W,bnBias31W,bnmean31W,bnvar31W,is_training(),bn_momentum,bn_lr,true);
     x += res12;
     x = torch::relu(x);
 
     torch::Tensor res13(x.clone());
     x = conv32->forward(x);
-    x = torch::batch_norm(bn32->forward(x), bn32W,bnBias32W,bnmean32W,bnvar32W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn32->forward(x), bn32W,bnBias32W,bnmean32W,bnvar32W,is_training(),bn_momentum,bn_lr,true);
     x = torch::relu(x);
     x = conv33->forward(x);
-    x = torch::batch_norm(bn33->forward(x), bn33W,bnBias33W,bnmean33W,bnvar33W,true,bn_momentum,bn_lr,true);
+    x = torch::batch_norm(bn33->forward(x), bn33W,bnBias33W,bnmean33W,bnvar33W,is_training(),bn_momentum,bn_lr,true);
     x += res13;
     x = torch::relu(x);
 
     x = torch::relu(torch::avg_pool2d(bn33->forward(x), 2));
 
-    x = torch::dropout(x, /*p=*/0.5, /*training=*/is_training());
-
-  //  std::cout << "print x end" << std::endl;
-  //  std::cout << x << std::endl;
-  
-  //  std::cout << "print x debug6" << std::endl;
-  //  std::cout << x[0][0][0] << std::endl;
-
+  //  x = torch::dropout(x, /*p=*/0.5, /*training=*/is_training());
+  //  x = torch::dropout(x, 0.5, true);
     x = x.view({-1, nodes_to_fc1});
     x = torch::relu(fc1->forward(x));
     return torch::log_softmax(x, /*dim=*/1);
