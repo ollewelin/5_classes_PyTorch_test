@@ -99,7 +99,7 @@ Do same for all image folders
     $ mv latest_model.pt original_latest_model.pt
     $ mv latest_model_Resnet-34_flowers.pt latest_model.pt
     
-## classify test
+## classify test Resnet-34
 
     $ ./classify ./data/class2/644.jpg
 
