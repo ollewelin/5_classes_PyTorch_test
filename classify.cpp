@@ -47,75 +47,72 @@ cv::Mat makeSquareImg(cv::Mat frame, int outputImageSize)
     //Size size(input_image_width,input_image_height);//the dst image size,e.g.100x100
     cv::Size outRectSize(outputImageSize, outputImageSize);
     //resize(src,dst,size);//resize image
-    cv::resize(rectImageTemp,rectImage,outRectSize);
+    cv::resize(rectImageTemp, rectImage, outRectSize);
   }
   return rectImage;
 }
 
-
-int main(int arc, char** argv)
+int main(int arc, char **argv)
 {
   std::string loc = argv[1];
   //Prepare for GPU
   torch::DeviceType device_type;
-  srand (time(NULL));
-  if (torch::cuda::is_available()) {
+  srand(time(NULL));
+  if (torch::cuda::is_available())
+  {
     std::cout << "CUDA available! Classify test image on GPU." << std::endl;
     device_type = torch::kCUDA;
-  } else {
+  }
+  else
+  {
     std::cout << "Classify test image on CPU." << std::endl;
     device_type = torch::kCPU;
   }
   torch::Device device(device_type);
 
-    // Load image with OpenCV.
-    cv::Mat img = cv::imread(loc);
-    cv::Mat imgR = makeSquareImg(img, input_img_size);
-    cv::imshow("sample", imgR);
-    cv::waitKey(1000);
-    // Convert the image and label to a tensor.
-    torch::Tensor img_tensor = torch::from_blob(imgR.data, {1, imgR.rows, imgR.cols, 3}, torch::kF32);
-    img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to CxHxW
-  //  img_tensor = img_tensor.to(device).contiguous();
-   img_tensor = img_tensor.to(device);
+  // Load image with OpenCV.
+  cv::Mat img = cv::imread(loc);
+  cv::Mat imgR = makeSquareImg(img, input_img_size);
+  // Convert the image and label to a tensor.
+  torch::Tensor img_tensor = torch::from_blob(imgR.data, {1, imgR.rows, imgR.cols, 3}, torch::kF32);
+  img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to CxHxW
+                                                 //  img_tensor = img_tensor.to(device).contiguous();
+  img_tensor = img_tensor.to(device);
 
-  cv::Mat testImg(input_img_size,input_img_size, CV_32FC3);
+  cv::Mat testImg(input_img_size, input_img_size, CV_32FC3);
   torch::Tensor CPUtensor;
-  std::cout << "========***==========" << std::endl;
-    torch::Tensor CPUtens = img_tensor.to(torch::kCPU);
-    float *index_ptr_testImg = testImg.ptr<float>(0);
-    for(int r=0;r<testImg.rows;r++){
-      for(int c=0;c<testImg.cols;c++){
-        for(int rgb=0;rgb<testImg.channels();rgb++)
-        {
-          //*index_ptr_testImg = CPUtens[kTestBatchSize-1][rgb][r][c].item<float>();
-          *index_ptr_testImg = CPUtens[0][rgb][r][c].item<float>();
-          index_ptr_testImg++;
-        }
+  torch::Tensor CPUtens = img_tensor.to(torch::kCPU);
+  float *index_ptr_testImg = testImg.ptr<float>(0);
+  for (int r = 0; r < testImg.rows; r++)
+  {
+    for (int c = 0; c < testImg.cols; c++)
+    {
+      for (int rgb = 0; rgb < testImg.channels(); rgb++)
+      {
+        //*index_ptr_testImg = CPUtens[kTestBatchSize-1][rgb][r][c].item<float>();
+        *index_ptr_testImg = CPUtens[0][rgb][r][c].item<float>();
+        index_ptr_testImg++;
       }
     }
-    cv::imshow("dataset img", testImg);
-    cv::waitKey(2000);
-    std::cout << "========***==========" << std::endl;
+  }
+  cv::imshow("dataset img", testImg);
+  // Load the model.
+  ObscureResNet model(5 /*nr of classes*/);
+  torch::load(model, "./latest_model.pt");
+  model->to(device);
 
-    // Load the model.
-    ObscureResNet model(5/*nr of classes*/);
-    torch::load(model, "./latest_model.pt");
-    model->to(device);
+  // Predict the probabilities for the classes.
+  torch::Tensor log_prob = model(img_tensor);
+  torch::Tensor prob = torch::exp(log_prob);
 
-    // Predict the probabilities for the classes.
-    torch::Tensor log_prob = model(img_tensor);
-    torch::Tensor prob = torch::exp(log_prob);
-
- for(int i=0;i<1;i++){
-    printf("i = %d\n", i);
-    printf("Probability of being\n\
+  int i = 0;
+  printf("Probability of being\n\
     class0 = %.2f percent\n\
     class1 = %.2f percent\n\
     class2 = %.2f percent\n\
     class3 = %.2f percent\n\    
-    class4 = %.2f percent\n", prob[i][0].item<float>()*100., prob[i][1].item<float>()*100., prob[i][2].item<float>()*100., prob[i][3].item<float>()*100., prob[i][4].item<float>()*100.);
-}
-
-    return 0;
+    class4 = %.2f percent\n",
+         prob[i][0].item<float>() * 100., prob[i][1].item<float>() * 100., prob[i][2].item<float>() * 100., prob[i][3].item<float>() * 100., prob[i][4].item<float>() * 100.);
+  cv::waitKey(5000);
+  return 0;
 }

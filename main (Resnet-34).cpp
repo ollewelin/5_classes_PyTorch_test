@@ -285,9 +285,7 @@ void test(
     cout << "=========================================" << endl;
 
     //auto output = model->forward(data);
-    cout << "Debug1" << endl;
     auto output = model->forward(data);
-    cout << "Debug2" << endl;
     torch::Tensor prob = torch::exp(output);
     for (int i = 0; i < kTestBatchSize; i++)
     {
@@ -409,11 +407,17 @@ auto main() -> int {
  
     std::string test_file;
 
-test_class = 3;
+    test_class = 3;
+
+     
     printf("\n");
     printf("************ Test image ************* \n");
 
     test(1, model, device, *test_loader, optimizer, test_dataset_size);
+
+       for (int t=0;t<nr_of_classes;t++){
+    test_class = t;
+
     printf("Test class number = %d\n", test_class);
 
     std::string str1 = "./data/class";
@@ -473,6 +477,7 @@ for(int i=0;i<1;i++){
     class3 = %.2f percent\n\    
     class4 = %.2f percent\n", prob[i][0].item<float>()*100., prob[i][1].item<float>()*100., prob[i][2].item<float>()*100., prob[i][3].item<float>()*100., prob[i][4].item<float>()*100.);
 }
-cv::waitKey(5000);
+cv::waitKey(1000);
+    }
   }
 }
