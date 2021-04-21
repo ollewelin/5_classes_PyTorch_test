@@ -98,6 +98,10 @@ Do same for all image folders
     $ gzip -d latest_model_Resnet-34_flowers.pt.gz
     $ mv latest_model.pt original_latest_model.pt
     $ mv latest_model_Resnet-34_flowers.pt latest_model.pt
+    
+## classify test
+
+    $ ./classify ./data/class2/644.jpg
 
 # Jetson Nano
 
