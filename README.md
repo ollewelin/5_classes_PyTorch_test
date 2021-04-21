@@ -94,10 +94,10 @@ Do same for all image folders
     
 ## Combine zip files
 
-    $ cat latest_model_Resnet-34_138-epochs.pt.gz.part-a* > latest_model_Resnet-34_138-epochs.pt.gz
-    $ gzip -d latest_model_Resnet-34_138-epochs.pt.gz
+    $ cat latest_model_Resnet-34_flowers.parta* > latest_model_Resnet-34_flowers.pt.gz
+    $ gzip -d latest_model_Resnet-34_flowers.pt.gz
     $ mv latest_model.pt original_latest_model.pt
-    $ mv latest_model_Resnet-34_138-epochs.pt latest_model.pt
+    $ mv latest_model_Resnet-34_flowers.pt latest_model.pt
 
 # Jetson Nano
 
