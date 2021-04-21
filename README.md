@@ -103,6 +103,9 @@ Do same for all image folders
 
     $ ./classify ./data/class2/644.jpg
 
+![](Resnet-34-classify_test.png)
+
+
 # Jetson Nano
 
 ## Jetson Nano installation
