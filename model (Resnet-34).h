@@ -315,7 +315,8 @@ struct ObscureResNetImpl : public torch::nn::Module
     x += res13;
     x = torch::relu(x);
 
-    x = torch::relu(torch::avg_pool2d(bn33->forward(x), 2));
+    //x = torch::relu(torch::avg_pool2d(x, 2));
+    x = torch::avg_pool2d(x, 2);
 
     x = torch::dropout(x, /*p=*/0.5, /*training=*/is_training());
   //  x = torch::dropout(x, 0.5, true);
