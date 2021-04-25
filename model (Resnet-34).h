@@ -168,6 +168,45 @@ struct ObscureResNetImpl : public torch::nn::Module
     torch::Tensor forward(torch::Tensor x) {
 
     x = torch::batch_norm(bn0->forward(x), bn0W,bnBias0W,bnmean0W,bnvar0W,is_training(),bn_momentum,bn_lr,true);
+ /* 
+    std::cout << x[0][2][0][0] << std::endl;
+    torch::Tensor x_cpu = x.clone();
+    cv::Mat img(224,224, CV_32FC3, cv::Scalar(0,0,0.3));
+    float *pImgData = (float *)img.data;
+     // loop through rows, columns and channels
+for (int row = 0; row < img.rows; ++row)
+{
+    for (int column = 0; column < img.cols; ++column)
+    {
+        for (int channel = 0; channel < img.channels(); ++channel)
+        {
+            pImgData[img.channels() * (img.cols * row + column) + channel] = x_cpu[0][channel][row][column]->tå();
+        }
+    }
+}
+
+    cv::imshow("img", img);
+    cv::waitKey(1);
+    
+
+    // example matrix
+Mat img = Mat::zeros(256, 128, CV_32FC3);
+
+// get the pointer (cast to data type of Mat)
+float *pImgData = (float *)img.data;
+
+// loop through rows, columns and channels
+for (int row = 0; row < img.rows; ++row)
+{
+    for (int column = 0; column < img.cols; ++column)
+    {
+        for (int channel = 0; channel < img.channels(); ++channel)
+        {
+            float value = pImgData[img.channels() * (img.cols * row + column) + channel];
+        }
+    }
+}
+*/
     x = torch::relu(torch::max_pool2d(conv1->forward(x), 2));
     x = torch::batch_norm(bn1->forward(x), bn1W,bnBias1W,bnmean1W,bnvar1W,is_training(),bn_momentum,bn_lr,true);
 
@@ -313,13 +352,20 @@ struct ObscureResNetImpl : public torch::nn::Module
     x = conv33->forward(x);
     x = torch::batch_norm(bn33->forward(x), bn33W,bnBias33W,bnmean33W,bnvar33W,is_training(),bn_momentum,bn_lr,true);
     x += res13;
+    x = torch::avg_pool2d(x, 2);
     x = torch::relu(x);
 
-    //x = torch::relu(torch::avg_pool2d(x, 2));
-    x = torch::avg_pool2d(x, 2);
+   // x = torch::relu(torch::avg_pool2d(bn33->forward(x), 2));
 
     x = torch::dropout(x, /*p=*/0.5, /*training=*/is_training());
-  //  x = torch::dropout(x, 0.5, true);
+  //x = torch::dropout(x, 0.5, true);
+
+  //  std::cout << "print x end" << std::endl;
+  //  std::cout << x << std::endl;
+  
+  //  std::cout << "print x debug6" << std::endl;
+  //  std::cout << x[0][0][0] << std::endl;
+
     x = x.view({-1, nodes_to_fc1});
     x = torch::relu(fc1->forward(x));
     return torch::log_softmax(x, /*dim=*/1);
