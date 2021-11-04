@@ -27,7 +27,7 @@ const char* kDataRoot = "./data";
 const int64_t kTrainBatchSize = 12;
 
 // The batch size for testing.
-const int64_t kTestBatchSize = 12;
+const int64_t kTestBatchSize = 48;
 
 // The number of epochs to train.
 const int64_t kNumberOfEpochs = 1000;
@@ -165,7 +165,6 @@ void train(
     auto data = batch.data.to(torch::kF32).to(device), 
     targets = batch.target.squeeze().to(torch::kInt64).to(device);
     optimizer.zero_grad();
-    //cout << data.sizes() << endl;
     auto output = model->forward(data);
 
     auto loss = torch::nll_loss(output, targets);
@@ -344,18 +343,11 @@ auto main() -> int {
     // Here we need to clone the data, as from_blob does not change the ownership of the underlying memory,
     // which, therefore, still belongs to OpenCV. If we did not clone the data at this point, the memory
     // would be deallocated after leaving the scope of this get method, which results in undefined behavior.
-    //    torch::Tensor img_tensor = torch::from_blob(imgSquarRect.data, {1, imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
-
-    torch::Tensor img_tensor1 = torch::from_blob(imgSquarRect.data, {imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
-    torch::Tensor img_tensor2 = torch::from_blob(imgSquarRect.data, {imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
-//    img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to BxCxHxW
-    torch::Tensor img_tensor_c = torch::zeros({2,3,224,224});
-    torch::Tensor img_tensor = img_tensor_c.to(device);
-    img_tensor[0] = img_tensor1.permute({2, 0, 1}); // convert to CxHxW
-    img_tensor[1] = img_tensor2.permute({2, 0, 1}); // convert to CxHxW
+    torch::Tensor img_tensor = torch::from_blob(imgSquarRect.data, {1, imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
+    img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to BxCxHxW
     
     auto data = img_tensor.to(torch::kF32).to(device);
-cout << data.sizes() << endl;
+
    // Predict the probabilities for the classes.
     auto log_prob = model->forward(data);
 
