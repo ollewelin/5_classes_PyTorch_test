@@ -83,7 +83,7 @@ Do same for all image folders
     $ make 
     $ ./main
 
-# Use of my plain Resnet-34 model instead
+# Use of my plain Resnet-34 model instead (work only on CUDA 10.1 and cuDNN 7 version)
 
 ## Use and renamne files for test Resnet-34
 
@@ -105,6 +105,13 @@ Do same for all image folders
 
 ![](Resnet-34-classify_test.png)
 
+# Use of my plain Resnet-34 model instead (work on CUDA 10.2 and cuDNN 8 version)
+
+move main.cpp from /Resnet-34-OK/ to root path
+move model.h from /Resnet-34-OK/ to root path
+make
+
+![](Resnet-34-OK/resnet-34-train.png)
 
 # Jetson Nano
 
