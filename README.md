@@ -108,8 +108,17 @@ Do same for all image folders
 # Use of my plain Resnet-34 model instead (work on CUDA 10.2 and cuDNN 8 version)
 
 move main.cpp from /Resnet-34-OK/ to root path
+
 move model.h from /Resnet-34-OK/ to root path
+
 make
+
+    $ mv main.cpp original_main.cpp
+    $ mv ./Resnet-34-OK/main.cpp main.cpp
+    $ mv model.h original_model.h
+    $ mv ./Resnet-34-OK/model.h model.h
+    $ make
+    $ ./main
 
 ![](Resnet-34-OK/resnet-34-train.png)
 
