@@ -337,17 +337,19 @@ auto main() -> int {
     printf("test file = ");
     cout << test_file << endl;
     cv::Mat img = cv::imread(test_file);
-/*
+
     cv::Mat imgSquarRect = makeSquareImg(img, input_img_size, test_file);
     // Convert the image and label to a tensor.
     // Here we need to clone the data, as from_blob does not change the ownership of the underlying memory,
     // which, therefore, still belongs to OpenCV. If we did not clone the data at this point, the memory
     // would be deallocated after leaving the scope of this get method, which results in undefined behavior.
-    printf("Debug1\n");
-    torch::Tensor img_tensor = torch::from_blob(imgSquarRect.data, {1, imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
-    printf("Debug2\n");
-    img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to BxCxHxW
-    printf("Debug3\n");
+    torch::Tensor img_tensor1 = torch::from_blob(imgSquarRect.data, {imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
+    torch::Tensor img_tensor2 = torch::from_blob(imgSquarRect.data, {imgSquarRect.rows, imgSquarRect.cols, imgSquarRect.channels()}, torch::kByte).clone();
+//    img_tensor = img_tensor.permute({0, 3, 1, 2}); // convert to BxCxHxW
+    torch::Tensor img_tensor_c = torch::zeros({2,3,224,224});
+    torch::Tensor img_tensor = img_tensor_c.to(device);
+    img_tensor[0] = img_tensor1.permute({2, 0, 1}); // convert to CxHxW
+    img_tensor[1] = img_tensor2.permute({2, 0, 1}); // convert to CxHxW
     auto data = img_tensor.to(torch::kF32).to(device);
     printf("Debug4\n");
    // Predict the probabilities for the classes.
@@ -364,7 +366,7 @@ auto main() -> int {
     cv::imshow("img", img);
     cv::imshow("imgSquarRect", imgSquarRect);
     //cv::waitKey(3000);
-    */
+    
     cv::waitKey(100);
 
     //  printf("Print Model weights parts of conv1 weights kernels\n");
